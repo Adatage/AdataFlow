@@ -34,10 +34,22 @@ class AdataFlow {
             throw "Failed to register component";
     }
 
+    _stylesheetApply(style) {
+        
+    }
+
+    _stylesheetAdd(style) {
+        Object.keys(style).forEach((s) => this._globalCss[s] = style[s]);
+    }
+
     _loadFunctions() {
         this.component = {
             register: this._componentRegister.bind(this),
             execute: this._componentExecute.bind(this)
+        };
+        this.stylesheet = {
+            add: this._stylesheetApply.bind(this),
+            apply: this._stylesheetAdd.bind(this)
         };
     }
 }
@@ -52,4 +64,12 @@ test.component.register('cd', (a = {}, c = null) => {
     if(c != null)
         e.innerHTML = c;
     return e;
+});
+
+test.stylesheet.add({
+    
+});
+
+test.stylesheet.apply({
+    
 });
