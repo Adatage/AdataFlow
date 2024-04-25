@@ -39,6 +39,16 @@ framework.component.register(['SomeName1','SomeName2'], (e) => {
   return element;
 });
 
+framework.component.register('page', () => {
+  var e = document.createElement("div");
+  return e;
+}, {
+  "background-color": "black",
+  ":hover": {
+    "background-color": "blue"
+  }
+});
+
 // Render page
 framework.render();
 ```
