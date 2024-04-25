@@ -39,6 +39,7 @@ framework.component.register(['SomeName1','SomeName2'], (e) => {
   return element;
 });
 
+// Register component with global component CSS
 framework.component.register('page', () => {
   var e = document.createElement("div");
   return e;
