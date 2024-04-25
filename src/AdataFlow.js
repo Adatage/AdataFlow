@@ -15,6 +15,7 @@ class AdataFlow {
         this._components = {};
         this._componentThree = {};
         this._globalCss = {};
+        this.styleElement = document.createElement("style");
 
         // Register functions into special paths
         this._loadFunctions();
@@ -25,8 +26,10 @@ class AdataFlow {
      */
     render() {
         var childs = [];
+        this.element.head.appendChild(this.styleElement);
         this.element.body.childNodes.forEach((e) => childs.push(e));
         this.element.body.innerHTML = null;
+        this._log(this.LogLevel.INFO, "Renderer", "Starting page renderer");
         childs.forEach((e) => this.element.body.appendChild(this._componentExecute(e)));
     }
 
@@ -39,14 +42,26 @@ class AdataFlow {
         var comName = component.nodeName.toLowerCase();
         if(comName == "#text")
             return component;
-        if(typeof this._components[comName] == 'undefined')
-            throw "Component \""+comName+"\" doesn't exist";
-        var com = this._components[comName](component);
+        if(typeof this._components[comName] == 'undefined') {
+            this._log(this.LogLevel.WARNING, "ComponentExecute", "Tryed to execute component which not exist: "+comName);
+            return null;
+        }
+        var com = this._components[comName].call(component);
         for(var child of component.childNodes)
             if(child.nodeName == "#text")
                 com.innerHTML += child.wholeText;
-            else
-                com.appendChild(this._componentExecute(child));
+            else {
+                var gen = this._componentExecute(child);
+                gen.classList.add(this._components[comName].identificator, this._randomClassName(15));
+                if(child.getAttribute("link") == null)
+                    com.appendChild(gen);
+                else {
+                    var link = document.createElement("a");
+                    link.href = child.getAttribute("link");
+                    link.appendChild(gen);
+                    com.appendChild(link);
+                }
+            }
         return com;
     }
 
@@ -55,7 +70,7 @@ class AdataFlow {
      * @param {Array|string} names One (string) or more (Array) names of for the current component function
      * @param {function} call Call should be function that return HTML Element
      */
-    _componentRegister(names, call) {
+    _componentRegister(names, call, style = {}) {
         if(!Array.isArray(names)) {
             this._log(this.LogLevel.DEBUG, "ComponentRegister", "Converting single component name into array");
             names = [names];
@@ -66,10 +81,43 @@ class AdataFlow {
                 continue;
             }
             this._log(this.LogLevel.INFO, "ComponentRegister", "Registering new component with name: "+name);
-            this._components[name] = call;
+            this._components[name] = { identificator: this._randomClassName(10), call: call };
+            var styleKeys = Object.keys(style);
+            if(styleKeys.length != 0) {
+                var properties = {
+                    default: '',
+                    extended: ''
+                };
+                styleKeys.forEach((key) => {
+                    if(typeof style[key] != 'object')
+                        properties.default += key+':'+style[key]+';';
+                    else {
+                        console.log(key);
+                        properties.extended = '';
+                        Object.keys(style[key]).forEach((sub) => properties.extended += sub+':'+style[key][sub]+';');
+                        this.styleElement.innerHTML += '.'+this._components[name].identificator+key+'{'+properties.extended+'}';
+                    }
+                    this.styleElement.innerHTML += '.'+this._components[name].identificator+'{'+properties.default+'}';
+                });
+                
+            }
+            this._log(this.LogLevel.INFO, "ComponentRegister", "Setting up unique class name for component: ");
             if(typeof this._components[name] != 'function')
                 this._log(this.LogLevel.ERROR, "ComponentRegister", "Failed to register component");
         }
+    }
+
+    /**
+     * Function used to generate random class names
+     * @param {integer} length How long should be the returned class name
+     * @returns Generated class name which starting with _
+     */
+    _randomClassName(length = 10) {
+        var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234546789';
+        var className = "";
+        for(var i = 0;i!=length;i++)
+            className += chars.charAt(Math.floor(Math.random() * (chars.length - 1)));
+        return '_'+className;
     }
 
     /**
