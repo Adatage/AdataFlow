@@ -30,38 +30,43 @@ class AdataFlow {
         this.element.body.childNodes.forEach((e) => childs.push(e));
         this.element.body.innerHTML = null;
         this._log(this.LogLevel.INFO, "Renderer", "Starting page renderer");
-        childs.forEach((e) => this.element.body.appendChild(this._componentExecute(e)));
+        for(var child of childs) {
+            var g = this._componentExecute(child);
+            if(typeof g == 'object')
+                this.element.body.appendChild(g);
+            else
+                this.element.body.innerHTML += g;
+        }
     }
 
     /**
      * Execute component function executes component and return built html element with included childs
      * @param {Object} component AdataFlow element form original source
-     * @returns {Object} HTML based element built using basic one or more html elements
+     * @returns {Object|string} HTML based element or plain text built using basic one or more html elements
      */
     _componentExecute(component) {
         var comName = component.nodeName.toLowerCase();
-        if(comName == "#text")
-            return component;
-        if(typeof this._components[comName] == 'undefined') {
+        var com = null;
+        if(typeof this._components[comName] == 'undefined' && comName != "#text")
             this._log(this.LogLevel.WARNING, "ComponentExecute", "Tryed to execute component which not exist: "+comName);
-            return null;
-        }
-        var com = this._components[comName].call(component);
-        for(var child of component.childNodes)
-            if(child.nodeName == "#text")
-                com.innerHTML += child.wholeText;
-            else {
-                var gen = this._componentExecute(child);
-                gen.classList.add(this._components[comName].identificator, this._randomClassName(15));
-                if(child.getAttribute("link") == null)
-                    com.appendChild(gen);
-                else {
-                    var link = document.createElement("a");
-                    link.href = child.getAttribute("link");
-                    link.appendChild(gen);
-                    com.appendChild(link);
-                }
+        else if(comName == "#text")
+            return component.wholeText;
+        else {
+            var com = this._components[comName].call(component);
+            com.classList.add(this._components[comName].identificator, this._randomClassName(15));
+            for(var child of component.childNodes) {
+                var g = this._componentExecute(child);
+                if(typeof g == 'object')
+                    com.appendChild(g);
+                else
+                    com.innerHTML += g;
             }
+            if(com.getAttribute("link") != null) {
+                var link = document.createElement("a");
+                link.href = com.getAttribute("link");
+                com = link.appendChild(com);
+            }
+        }
         return com;
     }
 
