@@ -107,6 +107,20 @@ class AdataFlow {
         }
     }
 
+    setGlobalCSS(css) {
+        if(typeof css == 'object') {
+            var addCSS = '';
+            for(var elem of Object.keys(css)) {
+                addCSS += elem+'{';
+                for(var key of Object.keys(css[elem]))
+                    addCSS += key+':'+css[elem][key]+';';
+                addCSS += '}';
+            }
+            this.styleElement.innerHTML += addCSS;
+        } else
+            this._log(this.LogLevel.WARNING, "GlobalCSS", "Global CSS rule set is not object");
+    }
+
     /**
      * Function used to generate random class names
      * @param {integer} length How long should be the returned class name
@@ -140,53 +154,4 @@ class AdataFlow {
             execute: this._componentExecute.bind(this)
         };
     }
-}
-
-window.onload = () => {
-    var test = new AdataFlow(document);
-
-    test.component.register('cd', (a = {}, c = null) => {
-        var e = document.createElement("div");
-        Object.keys(a).forEach((k) => {
-            e.setAttribute(k, a[k]);
-        });
-        if(c != null)
-            e.innerHTML = c;
-            return e;
-    });
-
-    test.component.register('menu', () => {
-        var e = document.createElement("div");
-
-        return e;
-    });
-
-    test.component.register('item', () => {
-        var e = document.createElement("div");
-
-        return e;
-    });
-
-    test.component.register('brand', () => {
-        var e = document.createElement("div");
-
-        return e;
-    });
-
-    test.component.register('page', () => {
-        var e = document.createElement("div");
-        return e;
-    }, {
-        "width": "100%",
-        "height": "100%"
-    });
-
-    test.component.register(['image','img'], (element) => {
-        var e = document.createElement("img");
-
-        e.src = element.getAttribute("source");
-        return e;
-    });
-
-    test.render();
 }
