@@ -92,10 +92,10 @@ class AdataFlow {
                 var prop = '';
                 styleKeys.forEach((key) => {
                     if(typeof style[key] != 'object')
-                        prop += key+':'+style[key]+';';
+                        prop += key.replaceAll('_', '-')+':'+style[key]+';';
                     else {
-                        var propE
-                        Object.keys(style[key]).forEach((sub) => propE += sub+':'+style[key][sub]+';');
+                        var propE = '';
+                        Object.keys(style[key]).forEach((sub) => propE += sub.replaceAll('_', '-')+':'+style[key][sub]+';');
                         this.styleElement.innerHTML += '.'+this._components[name].identificator+key+'{'+propE+'}';
                     }
                 });
