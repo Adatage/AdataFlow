@@ -53,7 +53,7 @@ class AdataFlow {
             return component.wholeText;
         else {
             var com = this._components[comName].call(component);
-            com.classList.add(this._components[comName].identificator, this._randomClassName(15));
+            com.classList.add(this._randomClassName(15), this._components[comName].identificator);
             for(var child of component.childNodes) {
                 var g = this._componentExecute(child);
                 if(typeof g == 'object')
@@ -89,22 +89,17 @@ class AdataFlow {
             this._components[name] = { identificator: this._randomClassName(10), call: call };
             var styleKeys = Object.keys(style);
             if(styleKeys.length != 0) {
-                var properties = {
-                    default: '',
-                    extended: ''
-                };
+                var prop = '';
                 styleKeys.forEach((key) => {
                     if(typeof style[key] != 'object')
-                        properties.default += key+':'+style[key]+';';
+                        prop += key+':'+style[key]+';';
                     else {
-                        console.log(key);
-                        properties.extended = '';
-                        Object.keys(style[key]).forEach((sub) => properties.extended += sub+':'+style[key][sub]+';');
-                        this.styleElement.innerHTML += '.'+this._components[name].identificator+key+'{'+properties.extended+'}';
+                        var propE
+                        Object.keys(style[key]).forEach((sub) => propE += sub+':'+style[key][sub]+';');
+                        this.styleElement.innerHTML += '.'+this._components[name].identificator+key+'{'+propE+'}';
                     }
-                    this.styleElement.innerHTML += '.'+this._components[name].identificator+'{'+properties.default+'}';
                 });
-                
+                this.styleElement.innerHTML += '.'+this._components[name].identificator+'{'+prop+'}';
             }
             this._log(this.LogLevel.INFO, "ComponentRegister", "Setting up unique class name for component: ");
             if(typeof this._components[name] != 'function')
@@ -145,4 +140,53 @@ class AdataFlow {
             execute: this._componentExecute.bind(this)
         };
     }
+}
+
+window.onload = () => {
+    var test = new AdataFlow(document);
+
+    test.component.register('cd', (a = {}, c = null) => {
+        var e = document.createElement("div");
+        Object.keys(a).forEach((k) => {
+            e.setAttribute(k, a[k]);
+        });
+        if(c != null)
+            e.innerHTML = c;
+            return e;
+    });
+
+    test.component.register('menu', () => {
+        var e = document.createElement("div");
+
+        return e;
+    });
+
+    test.component.register('item', () => {
+        var e = document.createElement("div");
+
+        return e;
+    });
+
+    test.component.register('brand', () => {
+        var e = document.createElement("div");
+
+        return e;
+    });
+
+    test.component.register('page', () => {
+        var e = document.createElement("div");
+        return e;
+    }, {
+        "width": "100%",
+        "height": "100%"
+    });
+
+    test.component.register(['image','img'], (element) => {
+        var e = document.createElement("img");
+
+        e.src = element.getAttribute("source");
+        return e;
+    });
+
+    test.render();
 }
