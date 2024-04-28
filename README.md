@@ -23,6 +23,19 @@ import AdataFlow from 'AdataFlow.min.js';
 // Initialize framework with root page element
 var framework = new AdataFlow(document);
 
+// Import external CSS file
+framework.css.import("https://some.link-to.css/stylesheet.css");
+
+// Add custom global CSS rules (underscore will be replaced with dash)
+framework.css.add({
+  "html, body": {
+    margin: 0
+  }
+  "a": {
+    text_decoration: "none"
+  }
+});
+
 // Register single component with name and function
 // with its argument e which is the element with
 // attributes in the source code
