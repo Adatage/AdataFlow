@@ -61,10 +61,11 @@ class AdataFlow {
                 else
                     com.innerHTML += g;
             }
-            if(com.getAttribute("link") != null) {
+            if(component.getAttribute("link") != null) {
                 var link = document.createElement("a");
-                link.href = com.getAttribute("link");
-                com = link.appendChild(com);
+                link.href = component.getAttribute("link");
+                link.appendChild(com)
+                com = link;
             }
         }
         return com;
@@ -107,13 +108,17 @@ class AdataFlow {
         }
     }
 
-    setGlobalCSS(css) {
+    _importCSS(url) {
+        this.styleElement.innerHTML += "@import url('"+url+"');";
+    }
+
+    _addCSS(css) {
         if(typeof css == 'object') {
             var addCSS = '';
             for(var elem of Object.keys(css)) {
                 addCSS += elem+'{';
                 for(var key of Object.keys(css[elem]))
-                    addCSS += key+':'+css[elem][key]+';';
+                    addCSS += key.replaceAll('_', '-')+':'+css[elem][key]+';';
                 addCSS += '}';
             }
             this.styleElement.innerHTML += addCSS;
@@ -142,7 +147,7 @@ class AdataFlow {
      */
     _log(level, path, text) {
         var d = new Date();
-        console.log("["+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"."+d.getMilliseconds()+"] ["+["INFO","WARNING","ERROR","DEBUG"][level]+"] ["+path+"] "+text);
+        //console.log("["+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"."+d.getMilliseconds()+"] ["+["INFO","WARNING","ERROR","DEBUG"][level]+"] ["+path+"] "+text);
     }
 
     /**
@@ -152,6 +157,10 @@ class AdataFlow {
         this.component = {
             register: this._componentRegister.bind(this),
             execute: this._componentExecute.bind(this)
+        };
+        this.css = {
+            import: this._importCSS.bind(this),
+            add: this._addCSS.bind(this)
         };
     }
 }
