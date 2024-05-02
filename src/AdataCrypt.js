@@ -527,6 +527,11 @@ class AdataCrypt {
         return output;
     }
 
+    /**
+     * CRC32 (Cyclic Redundancy Check 32)
+     * @param {string|number} input Input string or number
+     * @returns Output checksum
+     */
     static crc32(input) {
         var c,
             crcTable = [],
