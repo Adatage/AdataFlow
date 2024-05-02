@@ -14,9 +14,7 @@ class AdataFlow {
         this.component = {};
         this._components = {};
         this._componentThree = {};
-        this._globalCss = {};
-        this.styleElement = document.createElement("style");
-        this.scriptElement = document.createElement("script");
+        this._styleElement = document.createElement("style");
 
         // Register functions into special paths
         this._loadFunctions();
@@ -27,8 +25,7 @@ class AdataFlow {
      */
     render() {
         var childs = [];
-        this.element.head.appendChild(this.styleElement);
-        this.element.head.appendChild(this.scriptElement);
+        this.element.head.appendChild(this._styleElement);
         this.element.body.childNodes.forEach((e) => childs.push(e));
         this.element.body.innerHTML = null;
         this._log(this.LogLevel.INFO, "Renderer", "Starting page renderer");
@@ -39,6 +36,10 @@ class AdataFlow {
             else
                 this.element.body.innerHTML += g;
         }
+        var d = '<!DOCTYPE html>'+this.element.documentElement.outerHTML.replaceAll('\n', '').replaceAll('    ','');
+        this.element.open();
+        this.element.write(d);
+        this.element.close();
     }
 
     /**
@@ -54,25 +55,15 @@ class AdataFlow {
         else if(comName == "#text")
             return component.wholeText;
         else {
-            var com = this._components[comName].call(component);
-            com.classList.add(this._randomClassName(15), this._components[comName].identificator);
+            var identificator = this._components[comName].identificator;
+            var com = this._components[comName].call({ identificator, component });
+            com.classList.add(this._randName(15), identificator);
             for(var child of component.childNodes) {
                 var g = this._componentExecute(child);
-                if(typeof g == 'object') {
-                    console.log(comName);
-                    console.log(g);
-                    console.log(g.onmouseover);
-                }
                 if(typeof g == 'object')
                     com.appendChild(g);
                 else
                     com.innerHTML += g;
-                if(typeof g == 'object') {
-                    console.log(comName);
-                    console.log(g);
-                    console.log(g.onmouseover);
-                    console.log(com);
-                }
             }
             if(component.getAttribute("link") != null) {
                 var link = document.createElement("a");
@@ -100,20 +91,20 @@ class AdataFlow {
                 continue;
             }
             this._log(this.LogLevel.INFO, "ComponentRegister", "Registering new component with name: "+name);
-            this._components[name] = { identificator: this._randomClassName(10), call: call };
+            this._components[name] = { identificator: this._randName(10), call: call };
             var styleKeys = Object.keys(style);
             if(styleKeys.length != 0) {
                 var prop = '';
-                styleKeys.forEach((key) => {
+                for(var key of styleKeys) {
                     if(typeof style[key] != 'object')
                         prop += key.replaceAll('_', '-')+':'+style[key]+';';
                     else {
                         var propE = '';
                         Object.keys(style[key]).forEach((sub) => propE += sub.replaceAll('_', '-')+':'+style[key][sub]+';');
-                        this.styleElement.innerHTML += '.'+this._components[name].identificator+key+'{'+propE+'}';
+                        this._styleElement.innerHTML += '.'+this._components[name].identificator+key+'{'+propE+'}';
                     }
-                });
-                this.styleElement.innerHTML += '.'+this._components[name].identificator+'{'+prop+'}';
+                }
+                this._styleElement.innerHTML += '.'+this._components[name].identificator+'{'+prop+'}';
             }
             this._log(this.LogLevel.INFO, "ComponentRegister", "Setting up unique class name for component: ");
             if(typeof this._components[name] != 'function')
@@ -122,7 +113,7 @@ class AdataFlow {
     }
 
     _importCSS(url) {
-        this.styleElement.innerHTML += "@import url('"+url+"');";
+        this._styleElement.innerHTML += "@import url('"+url+"');";
     }
 
     _addCSS(css) {
@@ -134,25 +125,17 @@ class AdataFlow {
                     addCSS += key.replaceAll('_', '-')+':'+css[elem][key]+';';
                 addCSS += '}';
             }
-            this.styleElement.innerHTML += addCSS;
+            this._styleElement.innerHTML += addCSS;
         } else
             this._log(this.LogLevel.WARNING, "GlobalCSS", "Global CSS rule set is not object");
     }
 
-    _importJS(url) {
-        this.element.head += '<script src="'+url+'"></script>';
-    }
-
-    _addGlobalJS(f) {
-        this.scriptElement.innerHTML += String(f);
-    }
-
     /**
-     * Function used to generate random class names
+     * Function used to generate random names to javascript functions and CSS classes
      * @param {integer} l How long should be the returned class name
      * @returns Generated class name which starting with _
      */
-    _randomClassName(l = 10) {
+    _randName(l = 10) {
         var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234546789';
         var className = "";
         for(var i = 0;i!=l;i++)
@@ -182,10 +165,6 @@ class AdataFlow {
         this.css = {
             import: this._importCSS.bind(this),
             add: this._addCSS.bind(this)
-        };
-        this.js = {
-            import: this._importCSS.bind(this),
-            add: this._addGlobalJS.bind(this)
         };
     }
 }
