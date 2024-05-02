@@ -1,6 +1,4 @@
-import AdataFunc from "./AdataFunc.js";
-
-class AdataFlow extends AdataFunc {
+class AdataFlow {
     constructor(e) {
         super();
         this.element = e;
