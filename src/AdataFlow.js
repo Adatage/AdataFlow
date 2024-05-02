@@ -1,5 +1,8 @@
-class AdataFlow {
+import AdataFunc from "./AdataFunc.js";
+
+class AdataFlow extends AdataFunc {
     constructor(e) {
+        super();
         this.element = e;
 
         // Enums definition
