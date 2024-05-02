@@ -1,6 +1,6 @@
-class AdataStatic {
-    constructor(element) {
-        this.element = element;
+class AdataFlow {
+    constructor(e) {
+        this.element = e;
 
         // Enums definition
         this.LogLevel = {
@@ -21,7 +21,7 @@ class AdataStatic {
     }
 
     /**
-     * Main function used to read AdataStatic element and rewrite it using custom defined components
+     * Main function used to read AdataFlow element and rewrite it using custom defined components
      */
     render() {
         var childs = [];
@@ -44,7 +44,7 @@ class AdataStatic {
 
     /**
      * Execute component function executes component and return built html element with included childs
-     * @param {Object} component AdataStatic element form original source
+     * @param {Object} component AdataFlow element form original source
      * @returns {Object|string} HTML based element or plain text built using basic one or more html elements
      */
     _componentExecute(component) {
@@ -169,4 +169,4 @@ class AdataStatic {
     }
 }
 
-export default AdataStatic
+export default AdataFlow
