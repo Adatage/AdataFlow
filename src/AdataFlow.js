@@ -168,3 +168,5 @@ class AdataFlow {
         };
     }
 }
+
+export default AdataFlow
