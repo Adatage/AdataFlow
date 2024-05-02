@@ -1,11 +1,11 @@
 class AdataSocket {
-    static protocol = {
+    static protocol = Object.freeze({
         WEBSOCKET: 0,
         WEBTRANSPORT: 1,
         WEBRTC: 2
-    };
+    });
 
-    constructor() {
+    constructor(uri, protocol) {
         
     }
 }
