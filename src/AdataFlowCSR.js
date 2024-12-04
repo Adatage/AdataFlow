@@ -1,4 +1,4 @@
-class AdataFlow {
+class AdataFlowCSR {
     constructor(e) {
         super();
         this.element = e;
@@ -170,4 +170,4 @@ class AdataFlow {
     }
 }
 
-export default AdataFlow
+export default AdataFlowCSR

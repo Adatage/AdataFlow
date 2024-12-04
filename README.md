@@ -18,10 +18,10 @@ A flexible JavaScript web framework for building modern looking websites and web
 ## Usage/Examples
 
 ```javascript
-import AdataFlow from 'AdataFlow.min.js';
+import AdataFlowCSR from 'AdataFlowCSR.min.js';
 
 // Initialize framework with root page element
-var framework = new AdataFlow(document);
+var framework = new AdataFlowCSR(document);
 
 // Import external CSS file
 framework.css.import("https://some.link-to.css/stylesheet.css");
