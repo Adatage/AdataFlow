@@ -1,6 +1,8 @@
 class Styles {
-    constructor(instance) {
+    constructor(instance, options = {}) {
         this.instance = instance;
+
+        this.options = options;
     }
 }
 

@@ -5,8 +5,14 @@ class AdataFlowSSR {
     constructor(options = {}) {
         this.options = options;
 
-        this.styleManager = new Styles(this);
+        this.styleManager = new Styles(this, this.options.styles || {});
         this.identifyManager = new Identificators(this);
+
+        this.content = "hello world from AdataFlow";
+    }
+
+    render() {
+        return this.content;
     }
 }
 
