@@ -4,6 +4,7 @@ class Styles {
 
         this.options = options;
         this.css = {};
+        this.vars = {};
     }
 
     add(id, css = {}) {
@@ -11,6 +12,14 @@ class Styles {
             this.css[id] = css;
         else
             Object.keys(css).forEach(key => this.css[id][key] = css[key]);
+    }
+
+    addVar(key, value) {
+        vars[key] = value;
+    }
+
+    addVars(data) {
+        this.vars = { ...this.vars, ...data };
     }
 
     generateStyles(raw = false) {
@@ -40,6 +49,13 @@ class Styles {
                 css += '}';
             resultCss += css;
         });
+        let varsMatch, temp = null;
+        while(varsMatch = /\[\[(.*?)\]\]/g.exec(resultCss)) {
+            if(varsMatch == null)
+                break;
+            temp = this.vars[varsMatch[1].replaceAll('-', '_')];
+            resultCss = resultCss.replaceAll(varsMatch[0], (temp != null ? temp : 'unset'));
+        }
         return raw ? resultCss : "<style>" + resultCss + "</style>";
     }
 }

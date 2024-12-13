@@ -25,17 +25,24 @@ class AdataFlowSSR {
             return;
         var content = component.get();
         if(typeof content.css == 'object') {
+            this.styleManager.addVars(content.cssGlobals);
             Object.keys(content.css).forEach((identificator) => {
-                var id = this.identifyManager.add(identificator);
+                var id = this.identifyManager.add(identificator.replaceAll('_', '-'));
                 this.styleManager.add(id, content.css[identificator]);
             });
         }
         if(typeof content.html == 'string')
             this.html += content.html;
+        let classMatch;
+        while(classMatch = /\{\{(.*?)\}\}/g.exec(this.html)) {
+            if(classMatch == null)
+                break;
+            this.html = this.html.replaceAll(classMatch[0], this.identifyManager.add(classMatch[1]));
+        }
     }
 
     render() {
-        return this.html;
+        return this.html.replaceAll("\n", "").replaceAll("  ", "");
     }
 }
 

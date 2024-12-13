@@ -14,9 +14,9 @@ class Identificators {
         return this.aliases[idenfitication] != null ? this.aliases[idenfitication] : "";
     }
 
-    randName(fc = "_", l = 10) {
+    randName(fc = "_", xstart = true, l = 10) {
         var chars = 'abcdefghijklmnopqrstuvwxyz01234546789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        var className = fc + chars.charAt(Math.floor(Math.random() * (chars.length - 37)));
+        var className = fc + (xstart ? 'x' : '') + chars.charAt(Math.floor(Math.random() * (chars.length - 37)));
         for(var i = 0;i!=l-1;i++)
             className += chars.charAt(Math.floor(Math.random() * (chars.length - 1)));
         return className;
