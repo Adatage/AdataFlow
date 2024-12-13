@@ -1,6 +1,17 @@
 class Identificators {
     constructor(instance) {
         this.instance = instance;
+        this.aliases = {};
+    }
+
+    add(idenfitication) {
+        if(this.aliases[idenfitication] == null)
+            this.aliases[idenfitication] = this.randName(idenfitication.charAt(0) == '_' ? '_' : '');
+        return this.aliases[idenfitication];
+    }
+
+    get(idenfitication) {
+        return this.aliases[idenfitication] != null ? this.aliases[idenfitication] : "";
     }
 
     randName(fc = "_", l = 10) {

@@ -3,50 +3,35 @@ class Styles {
         this.instance = instance;
 
         this.options = options;
-        this.globalCSS = {};
-        this.localCSS = {};
+        this.css = {};
     }
 
-    addGlobal(name, css = {}) {
-        var id = this.instance.identifyManager.randName("_", 10);
-        this.globalCSS[name] = {
-            id,
-            css
-        };
-        return id;
-    }
-
-    getGlobal(name) {
-        return this.globalCSS[name].id;
-    }
-
-    add(css = {}) {
-        var id = this.instance.identifyManager.randName("", 10);
-        this.localCSS[id] = css;
-        return id;
+    add(id, css = {}) {
+        if(this.css[id] == null)
+            this.css[id] = css;
+        else
+            Object.keys(css).forEach(key => this.css[id][key] = css[key]);
     }
 
     generateStyles(raw = false) {
-        var temp = this.localCSS;
         var resultCss = "";
-        Object.values(this.globalCSS).forEach((global) => temp[global.id] = global.css);
-        Object.keys(this.localCSS).forEach((uuid) => {
+        Object.keys(this.css).forEach((uuid) => {
             var css = "";
-            Object.keys(this.localCSS[uuid]).forEach((cssKey) => {
-                if(typeof this.localCSS[uuid][cssKey] != 'object') {
+            Object.keys(this.css[uuid]).forEach((cssKey) => {
+                if(typeof this.css[uuid][cssKey] != 'object') {
                     if(css.length == 0)
                         css += "." + uuid + '{';
                     else
                         css += ';';
-                    css += cssKey.replaceAll('_','-') + ':' + this.localCSS[uuid][cssKey];
+                    css += cssKey.replaceAll('_','-') + ':' + this.css[uuid][cssKey];
                 } else {
                     var subCss = "";
-                    Object.keys(this.localCSS[uuid][cssKey]).forEach((cssSubKey) => {
+                    Object.keys(this.css[uuid][cssKey]).forEach((cssSubKey) => {
                         if(subCss.length == 0)
                             subCss += "}." + uuid + ':' + cssKey + '{';
                         else
                             subCss += ';';
-                        subCss += cssSubKey.replaceAll('_','-') + ':' + this.localCSS[uuid][cssKey][cssSubKey];
+                        subCss += cssSubKey.replaceAll('_','-') + ':' + this.css[uuid][cssKey][cssSubKey];
                     });
                     css += subCss;
                 }
