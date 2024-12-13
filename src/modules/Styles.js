@@ -29,7 +29,7 @@ class Styles {
             Object.keys(this.css[uuid]).forEach((cssKey) => {
                 if(typeof this.css[uuid][cssKey] != 'object') {
                     if(css.length == 0)
-                        css += "." + uuid + '{';
+                            css += "." + uuid + '{';
                     else
                         css += ';';
                     css += cssKey.replaceAll('_','-') + ':' + this.css[uuid][cssKey];

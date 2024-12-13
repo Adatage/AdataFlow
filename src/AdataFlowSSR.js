@@ -27,8 +27,18 @@ class AdataFlowSSR {
         if(typeof content.css == 'object') {
             this.styleManager.addVars(content.cssGlobals);
             Object.keys(content.css).forEach((identificator) => {
-                var id = this.identifyManager.add(identificator.replaceAll('_', '-'));
-                this.styleManager.add(id, content.css[identificator]);
+                var idTemp;
+                if(identificator.includes("{{")) {
+                    idTemp = identificator
+                    let classMatch;
+                    while(classMatch = /\{\{(.*?)\}\}/g.exec(idTemp)) {
+                        if(classMatch == null)
+                            break;
+                        idTemp = idTemp.replaceAll(classMatch[0], this.identifyManager.add(classMatch[1]));
+                    }
+                } else
+                    idTemp = this.identifyManager.add(identificator.replaceAll('_', '-'));
+                this.styleManager.add(idTemp, content.css[identificator]);
             });
         }
         if(typeof content.html == 'string')
