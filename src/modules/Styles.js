@@ -5,6 +5,7 @@ class Styles {
         this.options = options;
         this.css = {};
         this.vars = {};
+        this.imports = [];
     }
 
     add(id, css = {}) {
@@ -22,8 +23,13 @@ class Styles {
         this.vars = { ...this.vars, ...data };
     }
 
+    importCSS(urls) {
+        this.imports.push(...urls);
+    }
+
     generateStyles(raw = false) {
         var resultCss = "";
+        this.imports.forEach((url) => resultCss += "@import url("+url+");");
         Object.keys(this.css).forEach((uuid) => {
             var css = "";
             Object.keys(this.css[uuid]).forEach((cssKey) => {
@@ -37,7 +43,7 @@ class Styles {
                     var subCss = "";
                     Object.keys(this.css[uuid][cssKey]).forEach((cssSubKey) => {
                         if(subCss.length == 0)
-                            subCss += "}." + uuid + ':' + cssKey + '{';
+                            subCss += "}." + uuid + cssKey + '{';
                         else
                             subCss += ';';
                         subCss += cssSubKey.replaceAll('_','-') + ':' + this.css[uuid][cssKey][cssSubKey];
