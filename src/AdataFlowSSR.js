@@ -28,7 +28,6 @@ class AdataFlowSSR {
     addContent(component) {
         if(typeof component != 'object' || typeof component.content != 'object')
             return;
-
         var processComponent = (i) => {
             i.create();
             i.content.html = this._assignBracValues(i.content.html, i.constructor.name+'/');
@@ -52,7 +51,7 @@ class AdataFlowSSR {
                     if(!this.styleManager.imports.includes(imp))
                         this.styleManager.imports.push(imp);
                 });
-                this.styleManager.globals = { ...this.styleManager.globals, ...i.content.css.globals };
+                this.styleManager.vars = { ...this.styleManager.vars, ...i.content.css.globals };
             });
             Object.keys(i._childs).forEach((j) => {
                 i._childs[j].forEach((k) => {
@@ -64,7 +63,7 @@ class AdataFlowSSR {
             });
             return i.content;
         };
-        this.content = processComponent(component).html.replace("[[style]]", this.styleManager.generateStyles());
+        this.content = processComponent(component).html.replace("[[@style]]", this.styleManager.generateStyles()).replaceAll(/\[\[(.*?)\]\]/g, '');
     }
 
     render() {
