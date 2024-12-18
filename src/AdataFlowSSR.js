@@ -1,32 +1,30 @@
 import Styles from "./modules/Styles.js";
 import Identificators from "./modules/Identificators.js";
-import Components from "../../www/_components/index.js";
 
 class AdataFlowSSR {
-    constructor() {
-        this.options = {};
-        this.styleManager = null;
-        this.identifyManager = null;
-        this.Components = Components;
-        this.head = {};
-        this.body = {};
-        this.html = "";
+    constructor(options = {}) {
+        this._options = options;
+
+        this._identifyManager = new Identificators(this);
+        this.styleManager = new Styles(this, this._options.styles || {});
+
+        this.statusCode = 200;
+        this.headers = {
+            "Content-Type": "text/html;charset=utf-8"
+        };
+        this.content = "";
     }
 
-    initialize(options = {}) {
-        this.options = options;
+    addContent(component) {
+        
 
-        this.styleManager = new Styles(this, this.options.styles || {});
-        this.identifyManager = new Identificators(this);
-    }
-
-    add(component) {
+        /*
         if(typeof component != 'object' || typeof component.get != 'function')
             return;
         var content = component.get();
         if(typeof content.css == 'object') {
-            this.styleManager.addVars(content.cssGlobals);
-            Object.keys(content.css).forEach((identificator) => {
+            this.styleManager.addVars(content.css.globals);
+            Object.keys(content.css.data).forEach((identificator) => {
                 var idTemp;
                 if(identificator.includes("{{")) {
                     idTemp = identificator
@@ -34,25 +32,32 @@ class AdataFlowSSR {
                     while(classMatch = /\{\{(.*?)\}\}/g.exec(idTemp)) {
                         if(classMatch == null)
                             break;
-                        idTemp = idTemp.replaceAll(classMatch[0], this.identifyManager.add(classMatch[1]));
+                        idTemp = idTemp.replaceAll(classMatch[0], this._identifyManager.add(classMatch[1]));
                     }
                 } else
-                    idTemp = this.identifyManager.add(identificator.replaceAll('_', '-'));
-                this.styleManager.add(idTemp, content.css[identificator]);
+                    idTemp = this._identifyManager.add(identificator.replaceAll('_', '-'));
+                this.styleManager.add(idTemp, content.css.data[identificator]);
             });
         }
         if(typeof content.html == 'string')
-            this.html += content.html;
+            this.content += content.html;
         let classMatch;
-        while(classMatch = /\{\{(.*?)\}\}/g.exec(this.html)) {
+        while(classMatch = /\{\{(.*?)\}\}/g.exec(this.content)) {
             if(classMatch == null)
                 break;
-            this.html = this.html.replaceAll(classMatch[0], this.identifyManager.add(classMatch[1]));
+            this.content = this.content.replaceAll(classMatch[0], this._identifyManager.add(classMatch[1]));
         }
+        console.log(this.content);
+        this.content.replace("[[style]]", this.styleManager.generateStyles());
+        */
     }
 
     render() {
-        return this.html.replaceAll("\n", "").replaceAll("  ", "");
+        return {
+            statusCode: this.statusCode,
+            headers: this.headers,
+            body: this.content.replaceAll("\n", "").replaceAll("  ", "")
+        };
     }
 }
 
