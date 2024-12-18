@@ -16,7 +16,13 @@ class AdataFlowSSR {
     }
 
     addContent(component) {
+        if(typeof component != 'object' || typeof component.content != 'object')
+            return;
+
         
+
+
+        console.log((component));
 
         /*
         if(typeof component != 'object' || typeof component.get != 'function')
