@@ -1,11 +1,13 @@
 class Parser {
-    constructor() {
-        
+    constructor(instance) {
+        this.instance = instance;
     }
 
     parse(data) {
         return this._parseElem(data);
     }
+
+    
 
     _parseElem(data) {
         var match, elements = [];

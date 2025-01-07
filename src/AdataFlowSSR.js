@@ -1,13 +1,15 @@
 import Styles from "./modules/Styles.js";
 import Identificators from "./modules/Identificators.js";
-import VarParser from './modules/Parser.js';
+import Parser from './modules/Parser.js';
 
 class AdataFlowSSR {
     constructor(options = {}) {
         this._options = options;
+        this.requestData = this._options.requestData;
 
         this.identifyManager = new Identificators(this);
         this.styleManager = new Styles(this, this._options.styles || {});
+        this.parser = new Parser(this);
 
         this.response = {
             statusCode: 200,
@@ -65,20 +67,13 @@ class AdataFlowSSR {
         return i.content;
     }
 
-    setContent(component) {
-        console.log(component);
-        if(typeof component != 'object' || typeof component.content != 'object')
-            return;
-
-        this.response.content = this._processComponent(component).html.replace("[[@style]]", this.styleManager.generateStyles()).replaceAll(/\[\[(.*?)\]\]/g, '');
+    setContent(content, variables) {
+        
     }
 
     render() {
-        return {
-            statusCode: this.response.statusCode,
-            headers: this.headers,
-            content: this.response.content.replaceAll("\n", "").replaceAll("  ", "")
-        };
+        this.response.content = this.response.content.replaceAll("\n", "").replaceAll("  ", "");
+        return this.response;
     }
 }
 
