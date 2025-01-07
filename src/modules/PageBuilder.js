@@ -3,17 +3,21 @@ class PageBuilder {
         this.instance = instance;
     }
 
-    build(content) {
-        content = this.instance.parser.parse(content);
+    build(content, fl = true) {
+        if(fl)
+            content = this.instance.parser.parse(content);
         var result = "";
         for(let tag of content) {
             let component;
             if(typeof this.instance.components[tag.tagName] != 'undefined') {
                 component = new (this.instance.components[tag.tagName])();
-                if(tag.content != null && tag.content.length > 0 && component.content.html.includes("{{@default}}"))
-                    content = component.content.html.replace("{{@default}}", this._buildRaw());
+                if(component.content.html.includes("{{@default}}"))
+                    if(tag.content != null && tag.content.length > 0)
+                        result += component.content.html.replace("{{@default}}", this.build(tag.content, false));
+                    else
+                        result += component.content.html.replace("{{@default}}", '');
                 else
-                    content = component.content.html;
+                    result += component.content.html;
             } else {
                 // build back the original element (HTML)
             }
@@ -22,7 +26,10 @@ class PageBuilder {
     }
 
     _buildRaw(content) {
-        
+        var result = "";
+        for(let tag of content) {
+            let component;
+        }
         return content;
     }
 }
