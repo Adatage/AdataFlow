@@ -7,8 +7,6 @@ class Parser {
         return this._parseElem(data);
     }
 
-    
-
     _parseElem(data) {
         var match, elements = [];
         const pairElementRegex = /<(\w+)([^>]*)>(.*?)<\/\1>/gs;

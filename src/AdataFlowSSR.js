@@ -1,6 +1,7 @@
 import Styles from "./modules/Styles.js";
 import Identificators from "./modules/Identificators.js";
 import Parser from './modules/Parser.js';
+import PageBuilder from './modules/PageBuilder.js';
 
 class AdataFlowSSR {
     constructor(options = {}) {
@@ -10,6 +11,7 @@ class AdataFlowSSR {
         this.identifyManager = new Identificators(this);
         this.styleManager = new Styles(this, this._options.styles || {});
         this.parser = new Parser(this);
+        this.builder = new PageBuilder(this);
 
         this.response = {
             statusCode: 200,
@@ -68,11 +70,13 @@ class AdataFlowSSR {
     }
 
     setContent(content, variables) {
-        
+        var pageContent = this.builder.build(content);
+        //this.response.content = JSON.stringify(this.parser.parse(content));
+        this.response.content = JSON.stringify(pageContent);
     }
 
     render() {
-        this.response.content = this.response.content.replaceAll("\n", "").replaceAll("  ", "");
+        //this.response.content = this.response.content.replaceAll("\n", "").replaceAll("  ", "");
         return this.response;
     }
 }
