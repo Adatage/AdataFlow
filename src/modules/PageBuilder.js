@@ -4,7 +4,7 @@ class PageBuilder {
     }
 
     build(content) {
-
+        content = this.instance.parser.parse(content);
         return content;
     }
 }
