@@ -1,22 +1,34 @@
 class Identificators {
     constructor(instance) {
         this.instance = instance;
-        this.aliases = {};
+        this._identificators = {
+            class: {},
+            id: {},
+            js: {}
+        };
     }
 
     add(idenfitication) {
-        if(this.aliases[idenfitication] == null)
-            this.aliases[idenfitication] = this.randName(idenfitication.charAt(0) == '_' ? '_' : '');
-        return this.aliases[idenfitication];
+        var type = this.getType(idenfitication);
+        if(type == null)
+            return null;
+        if(this._identificators[type][idenfitication] == null)
+            this._identificators[type][idenfitication] = this._rand(idenfitication.charAt(0) == '_' ? '_' : '');
+        return this._identificators[type][idenfitication];
     }
 
     get(idenfitication) {
-        return this.aliases[idenfitication] != null ? this.aliases[idenfitication] : "";
+        var type = this.getType(idenfitication);
+        return this._identificators[type][idenfitication] != null ? this._identificators[type][idenfitication] : "";
     }
 
-    randName(fc = "_", xstart = true, l = 10) {
+    getType(idenfitication) {
+        return {'.':"class",'#':"id",'!':"js"}[idenfitication.charAt(0)] || null;
+    }
+
+    _rand(fc = "_", fl = 'x', l = 10) {
         var chars = 'abcdefghijklmnopqrstuvwxyz01234546789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        var className = fc + (xstart ? 'x' : '') + chars.charAt(Math.floor(Math.random() * (chars.length - 37)));
+        var className = fc + fl + chars.charAt(Math.floor(Math.random() * (chars.length - 37)));
         for(var i = 0;i!=l-1;i++)
             className += chars.charAt(Math.floor(Math.random() * (chars.length - 1)));
         return className;

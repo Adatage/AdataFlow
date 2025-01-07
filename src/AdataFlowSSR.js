@@ -1,11 +1,12 @@
 import Styles from "./modules/Styles.js";
 import Identificators from "./modules/Identificators.js";
+import VarParser from './modules/Parser.js';
 
 class AdataFlowSSR {
     constructor(options = {}) {
         this._options = options;
 
-        this._identifyManager = new Identificators(this);
+        this.identifyManager = new Identificators(this);
         this.styleManager = new Styles(this, this._options.styles || {});
 
         this.response = {
@@ -22,7 +23,8 @@ class AdataFlowSSR {
         while(classMatch = /\{\{(.*?)\}\}/g.exec(i)) {
             if(classMatch == null)
                 break;
-            i = i.replaceAll(classMatch[0], this._identifyManager.add(j+classMatch[1]));
+            console.log(classMatch[0]);
+            i = i.replaceAll(classMatch[0], this.identifyManager.add(j+classMatch[1]));
         }
         return i;
     }
@@ -36,7 +38,7 @@ class AdataFlowSSR {
                 idTemp = identificator
                 idTemp = this._assignBracValues(idTemp, i.constructor.name+'/');
             } else
-                idTemp = this._identifyManager.add(i.constructor.name+'/'+identificator.replaceAll('_', '-'));
+                idTemp = this.identifyManager.add(i.constructor.name+'/'+identificator.replaceAll('_', '-'));
             Object.keys(i.content.css.data[identificator]).forEach((k) => {
                 if(k.includes("{{")) {
                     idKtemp = k;
@@ -63,7 +65,8 @@ class AdataFlowSSR {
         return i.content;
     }
 
-    addContent(component) {
+    setContent(component) {
+        console.log(component);
         if(typeof component != 'object' || typeof component.content != 'object')
             return;
 
