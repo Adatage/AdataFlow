@@ -22,21 +22,42 @@ class PageBuilder {
                 // build back the original element (HTML)
             }
         }
-        result = this._assignVariables(result);
+        result = this._findVariables(result);
         return result;
     }
 
-    _assignVariables(data) {
+    _findVariables(data) {
         let classMatch;
         while(classMatch = /\{\{(.*?)\}\}/g.exec(data)) {
             if(classMatch == null)
                 break;
-            var prefix = classMatch[1].charAt(0);
-            var name = classMatch[1].substring(1);
-            console.log([prefix, name]);
-            data = data.replaceAll(classMatch[0], '_____');
+
+            var val = this._assignVariables(classMatch[1].charAt(0), classMatch[1].substring(1))
+
+            data = data.replaceAll(classMatch[0], val);
         }
         return data;
+    }
+
+    _assignVariables(prefix, varName) {
+        switch(prefix) {
+            case '.':
+            case '#':
+                this.instance.logger.log(1, "Building page with unset variable \""+varName+"\"");
+                return this.instance.identifyManager.add(prefix+varName);
+                break;
+            case '!':
+
+                break;
+            case '?':
+                return varName;
+                break;
+            case '@':
+
+                break;
+            default:
+                console.log("Warning");
+        }
     }
 }
 

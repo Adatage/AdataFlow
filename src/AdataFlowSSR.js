@@ -8,6 +8,7 @@ class AdataFlowSSR {
         this._options = options;
         this.requestData = this._options.requestData;
         this.components = this._options.components;
+        this.logger = this._options.logger;
 
         this.identifyManager = new Identificators(this);
         this.styleManager = new Styles(this, this._options.styles || {});
