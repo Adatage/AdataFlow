@@ -10,7 +10,9 @@ class PageBuilder {
         for(let tag of content) {
             let component;
             if(typeof this.instance.components[tag.tagName] != 'undefined') {
-                component = new (this.instance.components[tag.tagName])();
+                component = new (this.instance.components[tag.tagName])({
+                    attributes: tag.attributes
+                });
                 if(component.content.html.includes("{{@default}}"))
                     if(tag.content != null && tag.content.length > 0)
                         result += component.content.html.replace("{{@default}}", this.build(tag.content, false));
