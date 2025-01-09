@@ -59,7 +59,8 @@ class PageBuilder {
 
                 break;
             default:
-                console.log("Warning");
+                this.instance.logger.log(1, "Building page with variable \""+varName+"\" without prefix");
+                return '';
         }
     }
 }
