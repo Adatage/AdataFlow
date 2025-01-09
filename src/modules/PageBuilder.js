@@ -21,7 +21,16 @@ class PageBuilder {
                 else
                     result += component.content.html;
             } else {
-                // build back the original element (HTML)
+                var attribs = "";
+                Object.keys(tag.attributes).forEach((attName) => {
+                    attribs += ` ${attName}="${tag.attributes[attName]}"`;
+                });
+                var bTag = `<${tag.tagName+attribs}>`;
+                if(tag.content != null) {
+                    bTag += this.build(tag.content, false);
+                    bTag += `</${tag.tagName}>`;
+                }
+                result += bTag;
             }
         }
         result = this._findVariables(result);
