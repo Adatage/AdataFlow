@@ -43,15 +43,16 @@ class PageBuilder {
         switch(prefix) {
             case '.':
             case '#':
-                this.instance.logger.log(1, "Building page with unset variable \""+varName+"\"");
                 return this.instance.identifyManager.add(prefix+varName);
                 break;
             case '!':
 
                 break;
             case '?':
-                return varName;
-                break;
+                if(this.instance.globalsVariables[varName])
+                    return this.instance.globalsVariables[varName];
+                this.instance.logger.log(1, "Building page with undefined global variable \""+varName+"\"");
+                return '';
             case '@':
 
                 break;

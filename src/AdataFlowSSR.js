@@ -15,6 +15,8 @@ class AdataFlowSSR {
         this.parser = new Parser(this);
         this.builder = new PageBuilder(this);
 
+        this.globalsVariables = {};
+
         this.response = {
             statusCode: 200,
             headers: {
@@ -72,6 +74,7 @@ class AdataFlowSSR {
     }
 
     setContent(content, variables) {
+        this.globalsVariables = variables;
         var pageContent = this.builder.build(content);
         //console.log(pageContent);
         //this.response.content = JSON.stringify(this.parser.parse(content));
