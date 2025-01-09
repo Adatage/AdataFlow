@@ -4,6 +4,7 @@ class PageBuilder {
     }
 
     build(content, fl = true) {
+        console.log(fl, content);
         if(fl)
             content = this.instance.parser.parse(content);
         var result = "";
