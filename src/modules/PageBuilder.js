@@ -22,15 +22,19 @@ class PageBuilder {
                 // build back the original element (HTML)
             }
         }
+        result = this._assignVariables(result);
         return result;
     }
 
-    _buildRaw(content) {
-        var result = "";
-        for(let tag of content) {
-            let component;
+    _assignVariables(data) {
+        let classMatch;
+        while(classMatch = /\{\{(.*?)\}\}/g.exec(data)) {
+            if(classMatch == null)
+                break;
+            console.log(classMatch);
+            data = data.replaceAll(classMatch[0], '_____');
         }
-        return content;
+        return data;
     }
 }
 

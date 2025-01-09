@@ -72,7 +72,7 @@ class AdataFlowSSR {
 
     setContent(content, variables) {
         var pageContent = this.builder.build(content);
-        console.log(pageContent);
+        //console.log(pageContent);
         //this.response.content = JSON.stringify(this.parser.parse(content));
         this.response.content = pageContent.replaceAll("\n", "").replaceAll("  ", "");
     }

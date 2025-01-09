@@ -40,10 +40,6 @@ class Parser {
             attributes[match[1]] = match[2];
         return attributes;
     }
-
-    _parseVariables(data) {
-
-    }
 }
 
 export default Parser
