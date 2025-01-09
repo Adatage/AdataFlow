@@ -31,7 +31,9 @@ class PageBuilder {
         while(classMatch = /\{\{(.*?)\}\}/g.exec(data)) {
             if(classMatch == null)
                 break;
-            console.log(classMatch);
+            var prefix = classMatch[1].charAt(0);
+            var name = classMatch[1].substring(1);
+            console.log([prefix, name]);
             data = data.replaceAll(classMatch[0], '_____');
         }
         return data;
