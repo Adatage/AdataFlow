@@ -10,18 +10,26 @@ class Parser {
     _parseElem(data) {
         var match, elements = [];
         const pairElementRegex = /<(\w+)([^>]*)>(.*?)<\/\1>/gs;
-        while((match = pairElementRegex.exec(data)) !== null)
+        while((match = pairElementRegex.exec(data)) !== null) {
+            const precedingText = data.slice(0, pairElementRegex.lastIndex - match[0].length);
+            if(precedingText.trim())
+                elements.push({
+                    tagName: '#text',
+                    content: precedingText.replace(/<[^>]*>/g, '').trim()
+                });
             elements.push({
                 tagName: match[1],
                 attributes: this._parseAttributes(match[2].trim()),
                 content: this._parseElem(match[3])
             });
-        this._parseNonPairElem(data, elements);
-        return elements;
-    }
-
-    _parseNonPairElem(data, elements) {
-        var match;
+            data = data.slice(pairElementRegex.lastIndex);
+            pairElementRegex.lastIndex = 0;
+        }
+        if(data.trim())
+            elements.push({
+                tagName: '#text',
+                content: data.replace(/<[^>]*>/g, '').trim()
+            });
         const nonPairRegex = /(?<!<[^/>]*>)(<(\w+)([^>]*)\/>)(?![^<]*<\/\w+>)/g;
         while((match = nonPairRegex.exec(data)) !== null)
             elements.push({
@@ -29,7 +37,10 @@ class Parser {
                 attributes: this._parseAttributes(match[3].trim()),
                 content: null
             });
+        return elements;
     }
+    
+    
 
     _parseAttributes(data) {
         if(!data)

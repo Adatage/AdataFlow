@@ -4,7 +4,7 @@ class PageBuilder {
     }
 
     build(content, fl = true) {
-        console.log(fl, content);
+        //console.log(fl, content);
         if(fl)
             content = this.instance.parser.parse(content);
         var result = "";
@@ -21,7 +21,9 @@ class PageBuilder {
                         result += component.content.html.replace("{{@default}}", '');
                 else
                     result += component.content.html;
-            } else {
+            } else if(tag.tagName == "#text")
+                result += tag.content;
+            else {
                 var attribs = "";
                 Object.keys(tag.attributes).forEach((attName) => {
                     attribs += ` ${attName}="${tag.attributes[attName]}"`;
