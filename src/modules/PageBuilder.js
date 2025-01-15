@@ -4,7 +4,6 @@ class PageBuilder {
     }
 
     build(content, fl = true) {
-        //console.log(fl, content);
         if(fl)
             content = this.instance.parser.parse(content);
         var result = "";
@@ -21,6 +20,16 @@ class PageBuilder {
                         result += component.content.html.replace("{{@default}}", '');
                 else
                     result += component.content.html;
+                this.instance.styleManager.imports.push(...component.content.css.imports);
+                this.instance.styleManager.vars = {
+                    ...this.instance.styleManager.vars,
+                    ...component.content.css.globals
+                };
+                this.instance.styleManager.css = {
+                    ...this.instance.styleManager.css,
+                    ...component.content.css.data
+                };
+                //JS process
             } else if(tag.tagName == "#text")
                 result += tag.content;
             else {

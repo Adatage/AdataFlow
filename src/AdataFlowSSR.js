@@ -95,6 +95,7 @@ class AdataFlowSSR {
 
     render() {
         //this.response.content = this.response.content.replaceAll("\n", "").replaceAll("  ", "");
+        console.log(this.styleManager.generateStyles(true));
         return this.response;
     }
 }
