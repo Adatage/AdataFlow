@@ -9,6 +9,15 @@ class AdataFlowSSR {
         this.requestData = this._options.requestData;
         this.components = this._options.components;
         this.logger = this._options.logger;
+        this.config = {
+            allowComponents: true,
+            allowCSS: true,
+            allowJS: true,
+            allowClassRandomize: true,
+            allowIdRandomize: true,
+            allowJsRandomize: true,
+            allowVariables: true
+        };
 
         this.identifyManager = new Identificators(this);
         this.styleManager = new Styles(this, this._options.styles || {});
@@ -24,6 +33,10 @@ class AdataFlowSSR {
             },
             content: ""
         };
+    }
+
+    setContentType(type) {
+        this.response.headers["Content-Type"] = type;
     }
 
     _assignBracValues(i, j) {
