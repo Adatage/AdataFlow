@@ -20,7 +20,7 @@ class AdataFlowSSR {
         };
 
         this.identifyManager = new Identificators(this);
-        this.styleManager = new Styles(this, this._options.styles || {});
+        this.styleManager = new Styles(this);
         this.parser = new Parser(this);
         this.builder = new PageBuilder(this);
 
@@ -44,7 +44,6 @@ class AdataFlowSSR {
         while(classMatch = /\{\{(.*?)\}\}/g.exec(i)) {
             if(classMatch == null)
                 break;
-            console.log(classMatch[0]);
             i = i.replaceAll(classMatch[0], this.identifyManager.add(j+classMatch[1]));
         }
         return i;
@@ -91,7 +90,7 @@ class AdataFlowSSR {
         var pageContent = this.builder.build(content);
         //console.log(pageContent);
         //this.response.content = JSON.stringify(this.parser.parse(content));
-        this.response.content = pageContent.replaceAll("\n", "").replaceAll("  ", "");
+        this.response.content = pageContent//.replaceAll("\n", "").replaceAll("  ", "");
     }
 
     render() {
