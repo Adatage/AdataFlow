@@ -1,0 +1,26 @@
+{
+  "name": "adataflow",
+  "version": "1.0.0",
+  "description": "## 🚀 What is it? A flexible JavaScript web framework for building modern looking websites and web applications, which supports custom components, server side rendering and much more...",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "debug": "node test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adatage/adataflow.git"
+  },
+  "keywords": [
+    "framework",
+    "web"
+  ],
+  "author": "Adatage",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Adatage/adataflow/issues"
+  },
+  "homepage": "https://github.com/Adatage/adataflow#readme"
+}
