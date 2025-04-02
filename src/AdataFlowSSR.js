@@ -3,11 +3,12 @@ import Handler from "./modules/Handler.js";
 class AdataFlowSSR {
     constructor(options = {}) {
         this.options = options;
-        this.handlers = [];
+        this._handlers = [];
     }
 
-    process(request) {
-
+    handle(request) {
+        const handler = new Handler(this, request);
+        this._handlers.push(handler);
     }
 }
 

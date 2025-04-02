@@ -3,14 +3,18 @@ import fs from 'fs';
 import AdataFlowSSR from '../src/AdataFlowSSR.js';
 
 const framework = new AdataFlowSSR({
-
+    wwwroot: "./test"
 });
 
 const server = http.createServer((req, res) => {
-    const request = {
+    framework.handle({
         path: req.url,
-        
-    };
+        headers: req.headers
+    });
+
+    framework
+
+
     const path = "./test"+req.url;
     const r = {
         code: 200,
