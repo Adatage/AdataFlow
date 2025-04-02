@@ -1,7 +1,10 @@
 import Handler from "./modules/Handler.js";
+import Events from "./modules/Events.js";
 
-class AdataFlowSSR {
+class AdataFlowSSR extends Events {
     constructor(options = {}) {
+        super(this);
+        
         this.options = options;
         this._handlers = [];
     }

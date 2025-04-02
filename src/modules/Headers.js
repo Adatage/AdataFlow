@@ -25,6 +25,14 @@ class Headers {
         return this._headers[header.toLowerCase()];
     }
 
+    toObject() {
+        return this._headers;
+    }
+
+    toString() {
+        return Object.entries(this._headers).map(([name, value]) => `${name}: ${value}`).join("\r\n");
+    }
+
     _fromString(headers) {
         const lines = headers.split("\r\n");
         lines.forEach(line => {

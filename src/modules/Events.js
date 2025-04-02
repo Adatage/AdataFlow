@@ -3,7 +3,7 @@ class Events {
         this._events = {};
     }
 
-    addListener(name, callback) {
+    on(name, callback) {
         if(!this._events)
             this._events[name] = [];
         this._events[name].push(callback);
