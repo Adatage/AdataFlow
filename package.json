@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "## 🚀 What is it? A flexible JavaScript web framework for building modern looking websites and web applications, which supports custom components, server side rendering and much more...",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "test": "test"
   },

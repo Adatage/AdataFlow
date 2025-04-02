@@ -1,6 +1,6 @@
-const http = require('http');
-const fs = require('fs');
-const AdataFlowSSR = require('../src/AdataFlowSSR.js').default;
+import http from 'http';
+import fs from 'fs';
+import AdataFlowSSR from '../src/AdataFlowSSR.js';
 
 const framework = new AdataFlowSSR({
 
