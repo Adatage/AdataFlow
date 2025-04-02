@@ -1,5 +1,3 @@
-import Enums from "./Enums.js";
-import Logger from "./Logger.js";
 import Headers from "./Headers.js";
 
 class Handler {
