@@ -3,8 +3,8 @@ import Events from "./modules/Events.js";
 
 class AdataFlowSSR extends Events {
     constructor(options = {}) {
-        super(this);
-        
+        super();
+
         this.options = options;
         this._handlers = [];
     }
