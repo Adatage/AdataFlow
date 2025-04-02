@@ -11,6 +11,28 @@ A flexible JavaScript web framework for building modern looking websites and web
 - Consistent style
 - High performance
 
+## File structure
+```text
+www_root
+├── components
+│   ├── pages
+│   │   ├── Home.js
+│   │   ├── News.js
+│   │   └── Resources.js
+│   └── default
+│       ├── Navbar.js
+│       ├── Footer.js
+│       └── Content.js
+├── hosts
+│   ├── a.adatage.com
+│   │   └── ...
+│   ├── b.adatage.com
+│   │   └── ...
+│   └── c.adatage.com
+│       └── ...
+└── App.js
+```
+
 ## Usage/Examples
 
 ```javascript
