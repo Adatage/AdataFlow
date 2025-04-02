@@ -1,5 +1,6 @@
 import Handler from "./modules/Handler.js";
 import Events from "./modules/Events.js";
+import Utils from "./modules/Utils.js";
 
 class AdataFlowSSR extends Events {
     constructor(options = {}) {

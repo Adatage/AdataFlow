@@ -4,13 +4,13 @@ class Events {
     }
 
     on(name, callback) {
-        if(!this._events)
+        if(this._events[name] == null)
             this._events[name] = [];
         this._events[name].push(callback);
     }
 
     emit(name, ...data) {
-        if(typeof this._events[name] === 'object')
+        if(this._events[name] != null)
             this._events[name].forEach(evnt => evnt(...data));
     }
 }

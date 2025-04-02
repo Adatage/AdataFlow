@@ -31,6 +31,10 @@ class Utils {
         });
         return response;
     }
+
+    static importScript(file, current = false) {
+        return import(`${file}${current ? `?ts=${(new Date()).getTime()}` : ``}`);
+    }
 }
 
 export default Utils
