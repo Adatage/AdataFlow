@@ -21,7 +21,7 @@ class HTMLParser {
         return this._processComponents(ast);
     }
 
-    stringify(node) {
+    render(node) {
         if(node.tagName === "#text") return node.text;
         if(node.tagName === "#comment") return `<!--${node.text}-->`;
 
@@ -30,7 +30,7 @@ class HTMLParser {
             .join(" ");
         const openTag = `<${node.tagName}${propsString ? " " + propsString : ""}>`;
         const closeTag = node.pair ? `</${node.tagName}>` : "";
-        const content = node.childs ? node.childs.map((c) => this.stringify(c)).join("") : "";
+        const content = node.childs ? node.childs.map((c) => this.render(c)).join("") : "";
         return `${openTag}${content}${closeTag}`;
     }
 

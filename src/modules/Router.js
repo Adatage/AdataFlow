@@ -1,8 +1,10 @@
 class Router {
-    constructor(instance) {
-        this.instance = instance;
+    constructor() {
+        this._routes = [];
+    }
 
-        
+    route(routes) {
+        this._routes = routes;
     }
 }
 
