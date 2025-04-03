@@ -1,8 +1,9 @@
 (async () => {
     const app = await import("./www/App.js");
+    const host = "www.adatage.com";
     const path = "/home";
 
-    app.Router.handle(path);
+    const prebuild = app.Router.handle(host, path);
 
-    console.log(app);
+    console.log(prebuild);
 })();

@@ -35,6 +35,12 @@ class Utils {
     static importScript(file, current = false) {
         return import(`${file}${current ? `?ts=${(new Date()).getTime()}` : ``}`);
     }
+
+    static match(str, pattern) {
+        const regexPattern = '^' + pattern.split('*').map(p => p.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&')).join('.*') + '$';
+        const regex = new RegExp(regexPattern);
+        return regex.test(str);
+    }
 }
 
 export default Utils

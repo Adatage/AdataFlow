@@ -1,3 +1,5 @@
+import Utils from "./Utils.js";
+
 class Router {
     constructor() {
         this._routes = [];

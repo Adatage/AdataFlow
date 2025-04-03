@@ -17,8 +17,4 @@ Router.route([
     }
 ]);
 
-function App() {
-    
-}
-
-export { Router, App }
+export { Router }
