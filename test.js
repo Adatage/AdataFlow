@@ -1,9 +1,10 @@
 import http from 'http';
-import fs from 'fs';
 import AdataFlowSSR from './src/AdataFlowSSR.js';
 
 const framework = new AdataFlowSSR({
-    wwwroot: "./test"
+    wwwroot: "./www",
+    hosts: "./www/hosts",
+    components: "./www/components"
 });
 
 http.createServer((req, res) => {
